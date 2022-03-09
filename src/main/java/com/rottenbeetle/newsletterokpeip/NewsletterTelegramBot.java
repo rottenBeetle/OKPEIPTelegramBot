@@ -24,7 +24,8 @@ public class NewsletterTelegramBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return telegramFacade.handleUpdate(update);
+        final BotApiMethod<?> replyMessageToUser = telegramFacade.handleUpdate(update);
+        return replyMessageToUser;
     }
 
     @Override

@@ -27,6 +27,29 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.pengrad/java-telegram-bot-api
     implementation 'org.telegram:telegrambots:5.6.0'
 
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.1.Final'
+
+    // https://mvnrepository.com/artifact/org.springframework/spring-orm
+    implementation group: 'org.springframework', name: 'spring-orm', version: '5.3.15'
+
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.5.Final'
+
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+    // https://mvnrepository.com/artifact/com.mchange/c3p0
+    implementation group: 'com.mchange', name: 'c3p0', version: '0.9.5.5'
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.2'
+
+
+
+
+
+
 }
 
 tasks.named('test') {

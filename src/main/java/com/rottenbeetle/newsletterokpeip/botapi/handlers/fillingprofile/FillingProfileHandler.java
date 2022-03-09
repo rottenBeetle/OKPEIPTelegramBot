@@ -1,3 +1,4 @@
+/*
 package com.rottenbeetle.newsletterokpeip.botapi.handlers.fillingprofile;
 
 import com.rottenbeetle.newsletterokpeip.botapi.BotState;
@@ -10,9 +11,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 
-/**
- * Формирует анкету пользователя
- */
 @Slf4j
 @Component
 public class FillingProfileHandler implements InputMessageHandler {
@@ -37,6 +35,8 @@ public class FillingProfileHandler implements InputMessageHandler {
         return BotState.FILLING_PROFILE;
     }
 
+
+
     private SendMessage processUsersInput(Message inputMessage) {
         String userAnswer = inputMessage.getText();
         long userId = inputMessage.getFrom().getId();
@@ -56,7 +56,8 @@ public class FillingProfileHandler implements InputMessageHandler {
             profileData.setGroup(userAnswer);
             userDataCache.setUserCurrentBotState(userId,BotState.ASK_AGE);
         }
-        if (botState.equals(BotState.ASK_AGE)){
+      */
+/*  if (botState.equals(BotState.ASK_AGE)){
             replyToUser = messageService.getReplyMessage(chatId, "reply.askAge");
             profileData.setName(userAnswer);
             userDataCache.setUserCurrentBotState(userId,BotState.PROFILE_FILLED);
@@ -65,10 +66,12 @@ public class FillingProfileHandler implements InputMessageHandler {
         if (botState.equals(BotState.PROFILE_FILLED)){
             profileData.setAge(userAnswer);
             replyToUser = new SendMessage(String.valueOf(chatId), String.format("%s %s","Данные по вашей анкете",profileData));
-        }
+        }*//*
+
         userDataCache.saveUserProfileData(userId,profileData);
         return replyToUser;
     }
 
 
 }
+*/

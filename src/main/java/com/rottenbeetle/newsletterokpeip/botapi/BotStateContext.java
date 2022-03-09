@@ -34,11 +34,9 @@ public class BotStateContext{
 
     private boolean isFillingProfileState(BotState currentState) {
         switch (currentState){
-            case ASK_GROUP:
             case ASK_NAME:
             case ASK_AGE:
             case FILLING_PROFILE:
-            case PROFILE_FILLED:
                 return true;
             default:
                 return false;

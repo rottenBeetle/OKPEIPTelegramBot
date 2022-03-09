@@ -8,5 +8,6 @@ public enum BotState {
     ASK_NAME,
     ASK_AGE,
     FILLING_PROFILE,
-    PROFILE_FILLED
+    GET_SCHEDULE,
+    SUBSCRIBED
 }
