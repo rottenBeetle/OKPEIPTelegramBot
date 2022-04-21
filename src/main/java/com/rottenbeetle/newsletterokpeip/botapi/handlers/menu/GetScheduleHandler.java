@@ -1,42 +1,33 @@
-package com.rottenbeetle.newsletterokpeip.botapi.handlers.askgroup;
+package com.rottenbeetle.newsletterokpeip.botapi.handlers.menu;
 
 import com.rottenbeetle.newsletterokpeip.botapi.BotState;
 import com.rottenbeetle.newsletterokpeip.botapi.handlers.InputMessageHandler;
 import com.rottenbeetle.newsletterokpeip.buttons.SubscribeGroupButtons;
-import com.rottenbeetle.newsletterokpeip.cache.UserDataCache;
+import com.rottenbeetle.newsletterokpeip.model.Schedule;
 import com.rottenbeetle.newsletterokpeip.model.UserSubscription;
-import com.rottenbeetle.newsletterokpeip.service.MainMenuService;
 import com.rottenbeetle.newsletterokpeip.service.ReplyMessageService;
+import com.rottenbeetle.newsletterokpeip.service.ScheduleServiceImpl;
 import com.rottenbeetle.newsletterokpeip.service.UserSubscriptionServiceImpl;
-import com.rottenbeetle.newsletterokpeip.utils.Emojis;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.List;
 
-/**
- * Спрашивает пользователя его группу.
- */
 @Component
-@Slf4j
-public class AskGroupHandler implements InputMessageHandler {
-    private final ReplyMessageService replyMessageService;
+public class GetScheduleHandler implements InputMessageHandler {
+
+    private final ScheduleServiceImpl scheduleServiceImpl;
     private final SubscribeGroupButtons subscribeGroupButtons;
-    private final MainMenuService mainMenuService;
     private final UserSubscriptionServiceImpl userSubscriptionServiceImpl;
-    private final UserDataCache userDataCache;
+    private final ReplyMessageService replyMessageService;
 
-
-    public AskGroupHandler(ReplyMessageService replyMessageService, SubscribeGroupButtons subscribeGroupButtons, MainMenuService mainMenuService, UserSubscriptionServiceImpl userSubscriptionServiceImpl, UserDataCache userDataCache) {
-
-        this.replyMessageService = replyMessageService;
+    public GetScheduleHandler(ScheduleServiceImpl scheduleServiceImpl, SubscribeGroupButtons subscribeGroupButtons, UserSubscriptionServiceImpl userSubscriptionServiceImpl, ReplyMessageService replyMessageService) {
+        this.scheduleServiceImpl = scheduleServiceImpl;
         this.subscribeGroupButtons = subscribeGroupButtons;
-        this.mainMenuService = mainMenuService;
         this.userSubscriptionServiceImpl = userSubscriptionServiceImpl;
-        this.userDataCache = userDataCache;
+        this.replyMessageService = replyMessageService;
     }
-
 
     @Override
     public SendMessage handle(Message message) {
@@ -45,25 +36,30 @@ public class AskGroupHandler implements InputMessageHandler {
 
     @Override
     public BotState getHandlerName() {
-        return BotState.ASK_GROUP;
+        return BotState.GET_SCHEDULE;
     }
 
     private SendMessage processUsersInput(Message inputMessage) {
         long userId = inputMessage.getFrom().getId();
         long chatId = inputMessage.getChatId();
-        SendMessage replyToUser = null;
-
+        String message = "";
         UserSubscription userSubscription = userSubscriptionServiceImpl.getUsersSubscriptionById(userId);
-        if (userSubscription == null || userSubscription.getGroupName() == null){
+        if (userSubscription == null || userSubscription.getGroupName() == null) {
+            SendMessage replyToUser = null;
             replyToUser = replyMessageService.getReplyMessage(chatId, "reply.askGroup");
             replyToUser.setReplyMarkup(subscribeGroupButtons.getInlineMessageButtons());
-        }else {
-            userDataCache.setUserCurrentBotState(userId,BotState.SUBSCRIBED);
-            return mainMenuService.getMainMenuMessage(chatId,replyMessageService.getEmojiReplyText("reply.mainMenu.welcomeMessage", Emojis.HELP_MENU_WELCOME));
+            return replyToUser;
+        } else {
+            List<Schedule> scheduleList = scheduleServiceImpl.getAllScheduleForGroup(userSubscription.getGroupName());
+            for (Schedule schedule : scheduleList) {
+                message += "----" + schedule.getWeekDay() + "----" + "\n";
+                for (int i = 0; i < schedule.getLessons().length; i++) {
+                    message += i + 1 + ". " + schedule.getLessons()[i] + "\n";
+                }
+            }
         }
-
-        return replyToUser;
+        
+        return new SendMessage(String.valueOf(chatId), message);
     }
-
 
 }

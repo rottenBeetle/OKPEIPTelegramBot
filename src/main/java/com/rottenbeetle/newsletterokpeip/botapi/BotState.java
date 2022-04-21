@@ -5,9 +5,21 @@ package com.rottenbeetle.newsletterokpeip.botapi;
  */
 public enum BotState {
     ASK_GROUP,
-    ASK_NAME,
-    ASK_AGE,
+    CURRENT_GROUP,
+    SHOW_MAIN_MENU,
+    SHOW_HELP_MENU,
+
+    LAST_MESSAGES,
+    ASK_COUNT_MESSAGES,
+    SEND_LAST_MESSAGES,
+
+    SENDING_MESSAGE,
+    ASK_GROUP_FOR_MESSAGE,
+    ASK_MESSAGE,
+    SEND_MESSAGE,
+
     FILLING_PROFILE,
     GET_SCHEDULE,
-    SUBSCRIBED
+    SUBSCRIBED,
+    UNSUBSCRIBED
 }

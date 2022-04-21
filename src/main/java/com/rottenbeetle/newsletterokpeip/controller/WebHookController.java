@@ -1,6 +1,6 @@
 package com.rottenbeetle.newsletterokpeip.controller;
 
-import com.rottenbeetle.newsletterokpeip.NewsletterTelegramBot;
+import com.rottenbeetle.newsletterokpeip.botapi.NewsletterTelegramBot;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +15,7 @@ public class WebHookController {
     public WebHookController(NewsletterTelegramBot myTelegramBot) {
         this.telegramBot = myTelegramBot;
     }
+
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update){
         return telegramBot.onWebhookUpdateReceived(update);

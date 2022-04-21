@@ -1,4 +1,4 @@
-package com.rottenbeetle.newsletterokpeip.entity;
+package com.rottenbeetle.newsletterokpeip.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +11,16 @@ import java.util.Arrays;
 @Table(name = "schedule")
 @Getter
 @Setter
-public class Schedule {
+public class Schedule implements Comparable<Schedule>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
     @Column(name = "groupname")
     private String group;
     @Column(name = "weekday")
     private String weekDay;
-    @Type(type = "com.rottenbeetle.newsletterokpeip.entity.arraymapping.CustomStringArrayType")
+    @Type(type = "com.rottenbeetle.newsletterokpeip.model.arraymapping.CustomStringArrayType")
     @Column(name = "lessons", columnDefinition = "text[]")
     private String[] lessons ;
 
@@ -41,5 +41,10 @@ public class Schedule {
                 ", weekDay='" + weekDay + '\'' +
                 ", lessons=" + Arrays.toString(lessons) +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Schedule o) {
+      return (int)(this.id - o.id);
     }
 }

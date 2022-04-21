@@ -1,5 +1,6 @@
 package com.rottenbeetle.newsletterokpeip.botapi;
 
+import com.rottenbeetle.newsletterokpeip.botapi.handlers.InputMessageHandler;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -26,17 +27,34 @@ public class BotStateContext{
     }
 
     private InputMessageHandler findMessageHandler(BotState currentState) {
-        if (isFillingProfileState(currentState)){
-            return  messageHandlers.get(BotState.FILLING_PROFILE);
+        if (isSendingMessageState(currentState)){
+            return  messageHandlers.get(BotState.SENDING_MESSAGE);
         }
+
+        if (isGetLastMessagesState(currentState)){
+            return  messageHandlers.get(BotState.LAST_MESSAGES);
+        }
+
         return messageHandlers.get(currentState);
     }
 
-    private boolean isFillingProfileState(BotState currentState) {
+    private boolean isSendingMessageState(BotState currentState) {
         switch (currentState){
-            case ASK_NAME:
-            case ASK_AGE:
-            case FILLING_PROFILE:
+            case SENDING_MESSAGE:
+            case ASK_GROUP_FOR_MESSAGE:
+            case ASK_MESSAGE:
+            case SEND_MESSAGE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isGetLastMessagesState(BotState currentState) {
+        switch (currentState){
+            case LAST_MESSAGES:
+            case ASK_COUNT_MESSAGES:
+            case SEND_LAST_MESSAGES:
                 return true;
             default:
                 return false;

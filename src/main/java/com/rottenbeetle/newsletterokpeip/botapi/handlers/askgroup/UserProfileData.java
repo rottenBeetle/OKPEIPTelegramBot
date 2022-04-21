@@ -1,4 +1,4 @@
-package com.rottenbeetle.newsletterokpeip.botapi.handlers.fillingprofile;
+package com.rottenbeetle.newsletterokpeip.botapi.handlers.askgroup;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
  */
 
 @Data
-public class  UserProfileData {
+public class UserProfileData {
     private String group;
+    private String message;
+
 }

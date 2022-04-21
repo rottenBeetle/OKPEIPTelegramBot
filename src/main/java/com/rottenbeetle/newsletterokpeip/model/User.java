@@ -1,4 +1,4 @@
-package com.rottenbeetle.newsletterokpeip.entity;
+package com.rottenbeetle.newsletterokpeip.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class User {
     @Id
     @Column(name = "user_id")
-    private long user_id;
+    private Long user_id;
     @Column(name = "chat_id")
     private long chat_id;
     @Column(name = "groupname")

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class GroupMessageButtons {
+public class SubscribeGroupButtons {
    public InlineKeyboardMarkup getInlineMessageButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
@@ -18,22 +18,20 @@ public class GroupMessageButtons {
         buttonF13.setText("Ф-13");
         InlineKeyboardButton buttonU14 = new InlineKeyboardButton();
         buttonU14.setText("Ю-14");
-        InlineKeyboardButton buttonIdontKnow = new InlineKeyboardButton();
-        buttonIdontKnow.setText("Нету моей группы");
+        InlineKeyboardButton buttonD12 = new InlineKeyboardButton();
+        buttonD12.setText("Д-12");
 
-
-        //Every button must have callBackData, or else not work !
-        buttonP40.setCallbackData("P_40");
-        buttonF13.setCallbackData("F_13");
-        buttonU14.setCallbackData("U_14");
-        buttonIdontKnow.setCallbackData("-");
+        buttonP40.setCallbackData("SUBSCRIBE|П-40");
+        buttonF13.setCallbackData("SUBSCRIBE|Ф-13");
+        buttonU14.setCallbackData("SUBSCRIBE|Ю_14");
+        buttonD12.setCallbackData("SUBSCRIBE|Д_12");
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(buttonP40);
         keyboardButtonsRow1.add(buttonF13);
 
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-        keyboardButtonsRow2.add(buttonIdontKnow);
+        keyboardButtonsRow2.add(buttonD12);
         keyboardButtonsRow2.add(buttonU14);
 
 
