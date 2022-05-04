@@ -10,6 +10,7 @@ import com.rottenbeetle.newsletterokpeip.service.MessageService;
 import com.rottenbeetle.newsletterokpeip.service.ReplyMessageService;
 import com.rottenbeetle.newsletterokpeip.service.ScheduleService;
 import com.rottenbeetle.newsletterokpeip.service.UserSubscriptionService;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SendMessageHandler implements InputMessageHandler {
@@ -62,7 +64,8 @@ public class SendMessageHandler implements InputMessageHandler {
         }
 
         if (botState.equals(BotState.ASK_MESSAGE)) {
-            List<String> groups = scheduleService.findAllGroupName();
+            //TODO Заполнить базу Schedule и протестировать с разными группами
+            Set<String> groups = scheduleService.findAllGroupName();
             message = message.toUpperCase();
             if (!(groups.contains(message) || message.equals("ВСЕМ"))){
                 replyToUser = replyMessageService.getWarningReplyMessage(chatId, "reply.sendMessage.notFoundGroup");

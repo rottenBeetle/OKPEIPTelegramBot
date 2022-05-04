@@ -47,7 +47,6 @@ public class LastMessagesHandler implements InputMessageHandler {
         long userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();
 
-        UserProfileData profileData = userDataCache.getUserProfileData(userId);
         BotState botState = userDataCache.getUserCurrentBotState(userId);
 
         SendMessage replyToUser = null;

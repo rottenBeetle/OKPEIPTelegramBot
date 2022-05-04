@@ -63,7 +63,7 @@ public class SubscribeToNotificationsHandler implements CallbackQueryHandler {
         userProfileData.setGroup(groupName);
         userDataCache.setUserCurrentBotState(userId, BotState.SHOW_MAIN_MENU);
 
-        return mainMenuService.getMainMenuMessage(chatId,messageService.getEmojiReplyText("reply.query.subscribed", Emojis.SUCCESS_MARK));
+        return mainMenuService.getMainMenuMessage(chatId,messageService.getEmojiReplyText("reply.mainMenu.welcomeMessage", Emojis.HELP_MENU_WELCOME));
 
     }
 

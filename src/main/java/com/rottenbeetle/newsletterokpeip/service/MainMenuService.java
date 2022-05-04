@@ -56,6 +56,7 @@ public class MainMenuService {
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
         KeyboardRow row5 = new KeyboardRow();
+        KeyboardRow row6 = new KeyboardRow();
         row1.add(new KeyboardButton("Расписание"));
         row2.add(new KeyboardButton("Моя группа"));
         row3.add(new KeyboardButton("Последние сообщения"));
@@ -67,6 +68,8 @@ public class MainMenuService {
         if (listOfOdAdmins.contains(chatId)) {
             row5.add(new KeyboardButton("Отправить сообщение"));
             keyboard.add(row5);
+            row6.add(new KeyboardButton("Добавить группу/Изменить расписание"));
+            keyboard.add(row6);
         }
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;

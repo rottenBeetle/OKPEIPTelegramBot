@@ -1,43 +1,59 @@
 package com.rottenbeetle.newsletterokpeip.buttons;
 
+import com.rottenbeetle.newsletterokpeip.model.Schedule;
+import com.rottenbeetle.newsletterokpeip.service.ScheduleService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SubscribeGroupButtons {
-   public InlineKeyboardMarkup getInlineMessageButtons() {
+    private final ScheduleService scheduleService;
+
+    public SubscribeGroupButtons(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    public InlineKeyboardMarkup getInlineMessageButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-        InlineKeyboardButton buttonP40 = new InlineKeyboardButton();
-        buttonP40.setText("П-40");
-        InlineKeyboardButton buttonF13 = new InlineKeyboardButton();
-        buttonF13.setText("Ф-13");
-        InlineKeyboardButton buttonU14 = new InlineKeyboardButton();
-        buttonU14.setText("Ю-14");
-        InlineKeyboardButton buttonD12 = new InlineKeyboardButton();
-        buttonD12.setText("Д-12");
-
-        buttonP40.setCallbackData("SUBSCRIBE|П-40");
-        buttonF13.setCallbackData("SUBSCRIBE|Ф-13");
-        buttonU14.setCallbackData("SUBSCRIBE|Ю_14");
-        buttonD12.setCallbackData("SUBSCRIBE|Д_12");
+        //FIXME Группы брать из БД
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-        keyboardButtonsRow1.add(buttonP40);
-        keyboardButtonsRow1.add(buttonF13);
 
-        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-        keyboardButtonsRow2.add(buttonD12);
-        keyboardButtonsRow2.add(buttonU14);
-
+        Set<String> groups = scheduleService.findAllGroupName();
+        for (String group : groups) {
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(group);
+            button.setCallbackData("SUBSCRIBE|" + group);
+            keyboardButtonsRow1.add(button);
+        }
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow1);
-        rowList.add(keyboardButtonsRow2);
+
+        if (groups.size() > 4) {
+            List<InlineKeyboardButton> temp = new ArrayList<>();
+            for (int i = 1; i < keyboardButtonsRow1.size(); i++) {
+                temp.add(keyboardButtonsRow1.get(i-1));
+                if (i % 4 == 0) {
+                    rowList.add(temp);
+                    temp = new ArrayList<>();
+                }
+            }
+            if ((groups.size()) % 4 != 0) {
+                temp = new ArrayList<>();
+                for (int i = groups.size() - (groups.size() % 4); i < groups.size(); i++) {
+                    temp.add(keyboardButtonsRow1.get(i));
+                }
+                rowList.add(temp);
+            }
+
+        } else {
+            rowList.add(keyboardButtonsRow1);
+        }
 
         inlineKeyboardMarkup.setKeyboard(rowList);
 

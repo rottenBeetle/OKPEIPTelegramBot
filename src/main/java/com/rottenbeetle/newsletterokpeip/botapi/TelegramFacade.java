@@ -26,6 +26,7 @@ public class TelegramFacade {
     private final BotStateContext botStateContext;
     private final UserDataCache userDataCache;
     private final CallbackQueryFacade callbackQueryFacade;
+    //FIXME Добавить возможность добавления админа
     @Value("#{'${listOfIdAdmins}'.split(',')}")
     private List<Long> listOfOdAdmins;
 
@@ -86,6 +87,11 @@ public class TelegramFacade {
             case "Отправить сообщение": {
                 if (listOfOdAdmins.contains(chatId))
                 botState = BotState.SENDING_MESSAGE;
+                break;
+            }
+            case "Добавить группу/Изменить расписание": {
+                if (listOfOdAdmins.contains(chatId))
+                    botState = BotState.GROUP_HANDLER;
                 break;
             }
             default:

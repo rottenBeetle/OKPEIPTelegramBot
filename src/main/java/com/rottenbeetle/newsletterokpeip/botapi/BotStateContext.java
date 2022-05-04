@@ -35,7 +35,26 @@ public class BotStateContext{
             return  messageHandlers.get(BotState.LAST_MESSAGES);
         }
 
+        if (isEditingGroup(currentState)){
+            return  messageHandlers.get(BotState.GROUP_HANDLER);
+        }
+
         return messageHandlers.get(currentState);
+    }
+
+    private boolean isEditingGroup(BotState currentState) {
+        switch (currentState){
+            case GROUP_HANDLER:
+            case ADD_GROUP:
+            case SAVE_GROUP:
+            case ASK_FILLING_SCHEDULE:
+            case ACTIONS_GROUP:
+            case GET_WEEKDAY_AND_ADD_SCHEDULE:
+
+                return true;
+            default:
+                return false;
+        }
     }
 
     private boolean isSendingMessageState(BotState currentState) {

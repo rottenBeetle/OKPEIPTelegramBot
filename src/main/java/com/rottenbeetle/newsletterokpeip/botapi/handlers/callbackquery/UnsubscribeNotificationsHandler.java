@@ -4,6 +4,7 @@ import com.rottenbeetle.newsletterokpeip.botapi.BotState;
 import com.rottenbeetle.newsletterokpeip.botapi.NewsletterTelegramBot;
 import com.rottenbeetle.newsletterokpeip.cache.UserDataCache;
 import com.rottenbeetle.newsletterokpeip.model.UserSubscription;
+import com.rottenbeetle.newsletterokpeip.service.MainMenuService;
 import com.rottenbeetle.newsletterokpeip.service.ParseQueryDataService;
 import com.rottenbeetle.newsletterokpeip.service.ReplyMessageService;
 import com.rottenbeetle.newsletterokpeip.service.UserSubscriptionServiceImpl;
@@ -24,16 +25,18 @@ public class UnsubscribeNotificationsHandler implements CallbackQueryHandler {
     private final ReplyMessageService messagesService;
     private final NewsletterTelegramBot telegramBot;
     private final UserDataCache userDataCache;
+    private final MainMenuService mainMenuService;
 
     public UnsubscribeNotificationsHandler(UserSubscriptionServiceImpl subscriptionService,
                                            ParseQueryDataService parseService,
                                            ReplyMessageService messagesService,
-                                           @Lazy NewsletterTelegramBot telegramBot, UserDataCache userDataCache) {
+                                           @Lazy NewsletterTelegramBot telegramBot, UserDataCache userDataCache, MainMenuService mainMenuService) {
         this.subscriptionService = subscriptionService;
         this.parseService = parseService;
         this.messagesService = messagesService;
         this.telegramBot = telegramBot;
         this.userDataCache = userDataCache;
+        this.mainMenuService = mainMenuService;
     }
 
     @Override
@@ -60,6 +63,6 @@ public class UnsubscribeNotificationsHandler implements CallbackQueryHandler {
 
         userDataCache.setUserCurrentBotState(userId, BotState.ASK_GROUP);
 
-        return messagesService.getSuccessReplyMessage(chatId, "reply.query.unsubscribed");
+        return mainMenuService.getMainMenuMessage(chatId,messagesService.getEmojiReplyText("reply.mainMenu.welcomeMessage", Emojis.HELP_MENU_WELCOME));
     }
 }

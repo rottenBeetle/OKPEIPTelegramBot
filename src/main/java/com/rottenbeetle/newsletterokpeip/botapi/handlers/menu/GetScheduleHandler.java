@@ -40,6 +40,7 @@ public class GetScheduleHandler implements InputMessageHandler {
     }
 
     private SendMessage processUsersInput(Message inputMessage) {
+        //FIXME Выводить отдельными сообщениями
         long userId = inputMessage.getFrom().getId();
         long chatId = inputMessage.getChatId();
         String message = "";
@@ -50,15 +51,20 @@ public class GetScheduleHandler implements InputMessageHandler {
             replyToUser.setReplyMarkup(subscribeGroupButtons.getInlineMessageButtons());
             return replyToUser;
         } else {
+
             List<Schedule> scheduleList = scheduleServiceImpl.getAllScheduleForGroup(userSubscription.getGroupName());
+
             for (Schedule schedule : scheduleList) {
-                message += "----" + schedule.getWeekDay() + "----" + "\n";
-                for (int i = 0; i < schedule.getLessons().length; i++) {
-                    message += i + 1 + ". " + schedule.getLessons()[i] + "\n";
+                if (schedule.getWeekDay() == null || schedule.getLessons() == null) {
+                    return replyMessageService.getWarningReplyMessage(chatId, "reply.scheduleNotFill");
+                }else {
+                    message += "----" + schedule.getWeekDay() + "----" + "\n";
+                    for (int i = 0; i < schedule.getLessons().length; i++) {
+                        message += i + 1 + ". " + schedule.getLessons()[i] + "\n";
+                    }
                 }
             }
         }
-        
         return new SendMessage(String.valueOf(chatId), message);
     }
 

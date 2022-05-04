@@ -10,7 +10,7 @@ public enum Emojis {
     NOTIFICATION_MARK_FAILED(EmojiParser.parseToUnicode(":exclamation:")),
     SUCCESS_UNSUBSCRIBED(EmojiParser.parseToUnicode(":negative_squared_cross_mark:")),
     SUCCESS_SUBSCRIBED(EmojiParser.parseToUnicode(":mailbox:")),
-    HELP_MENU_WELCOME(EmojiParser.parseToUnicode(":hatched_chick:"));
+    HELP_MENU_WELCOME(EmojiParser.parseToUnicode(":arrow_down:"));
 
     private String emojiName;
 
