@@ -21,7 +21,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
-
+/*
+   Отправляет сообщения определенной группе, либо всем пользователям.
+ */
 @Component
 public class SendMessageHandler implements InputMessageHandler {
     private final ReplyMessageService replyMessageService;
@@ -64,7 +66,6 @@ public class SendMessageHandler implements InputMessageHandler {
         }
 
         if (botState.equals(BotState.ASK_MESSAGE)) {
-            //TODO Заполнить базу Schedule и протестировать с разными группами
             Set<String> groups = scheduleService.findAllGroupName();
             message = message.toUpperCase();
             if (!(groups.contains(message) || message.equals("ВСЕМ"))){

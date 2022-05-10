@@ -30,4 +30,8 @@ public enum BotState {
     GET_SCHEDULE,
     SUBSCRIBED,
 
+    ADD_ADMIN,
+    SAVE_ADMIN,
+    ASK_ADMIN_ID
+
 }

@@ -18,6 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+/*
+   Выводит последние сообщения, которые были отправлены учителями.
+ */
 @Component
 public class LastMessagesHandler implements InputMessageHandler {
     private final MessageService messageService;

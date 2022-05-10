@@ -17,6 +17,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     private ScheduleRepository scheduleRepository;
 
     @Override
+    public Schedule findByGroupAndWeekDay(String group, String weekday) {
+        return scheduleRepository.findByGroupAndWeekDay(group,weekday);
+    }
+
+    @Override
     public List<Schedule> getAllScheduleForGroup(String group){
         List<Schedule> schedules = scheduleRepository.findAllByGroup(group);
         Collections.sort(schedules);

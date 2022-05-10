@@ -27,15 +27,14 @@ public class UserServiceImpl implements UserService {
         User user = null;
         if (optional.isPresent()){
             user = optional.get();
-        }else {
-            throw new RuntimeException("User not found for id :: " + id);
         }
         return user;
     }
 
     @Override
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+    public User getByUserName(String username) {
+        return userRepository.getByUserName(username);
     }
+
 
 }

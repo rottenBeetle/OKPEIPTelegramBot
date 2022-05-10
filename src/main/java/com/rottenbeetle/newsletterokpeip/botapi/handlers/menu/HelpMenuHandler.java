@@ -14,6 +14,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 
+/*
+   Выводит меню помощи
+ */
 @Component
 public class HelpMenuHandler implements InputMessageHandler {
     private final MainMenuService mainMenuService;

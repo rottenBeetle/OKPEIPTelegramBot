@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface ScheduleService {
+    Schedule findByGroupAndWeekDay(String group,String weekday);
     List<Schedule> getAllScheduleForGroup(String group);
     Set<String> findAllGroupName();
     void saveSchedule(Schedule schedule);

@@ -20,7 +20,6 @@ public class SubscribeGroupButtons {
 
     public InlineKeyboardMarkup getInlineMessageButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        //FIXME Группы брать из БД
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
 
@@ -43,6 +42,7 @@ public class SubscribeGroupButtons {
                     temp = new ArrayList<>();
                 }
             }
+
             if ((groups.size()) % 4 != 0) {
                 temp = new ArrayList<>();
                 for (int i = groups.size() - (groups.size() % 4); i < groups.size(); i++) {

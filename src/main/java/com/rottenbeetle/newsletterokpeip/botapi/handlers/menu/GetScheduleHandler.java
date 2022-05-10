@@ -14,6 +14,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 
+/*
+   Получает расписание на всю неделю для текущей группы пользователя.
+ */
 @Component
 public class GetScheduleHandler implements InputMessageHandler {
 

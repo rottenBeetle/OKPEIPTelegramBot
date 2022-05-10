@@ -1,8 +1,8 @@
 package com.rottenbeetle.newsletterokpeip.service;
 
-import com.rottenbeetle.newsletterokpeip.botapi.BotState;
+import com.rottenbeetle.newsletterokpeip.model.Role;
+import com.rottenbeetle.newsletterokpeip.model.User;
 import com.rottenbeetle.newsletterokpeip.utils.Emojis;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -18,12 +18,12 @@ import java.util.List;
 @Service
 public class MainMenuService {
     private final LocaleMessageService localeMessageService;
-    @Value("#{'${listOfIdAdmins}'.split(',')}")
-    private List<Long> listOfOdAdmins;
+    private final UserService userService;
 
 
-    public MainMenuService(LocaleMessageService localeMessageService) {
+    public MainMenuService(LocaleMessageService localeMessageService, UserService userService) {
         this.localeMessageService = localeMessageService;
+        this.userService = userService;
     }
 
     public SendMessage getMainMenuMessage(final long chatId, final String textMessage) {
@@ -45,6 +45,7 @@ public class MainMenuService {
     private ReplyKeyboardMarkup getMainMenuKeyboard(long chatId) {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        User user = userService.getUserById(chatId);
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
@@ -55,21 +56,20 @@ public class MainMenuService {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
-        KeyboardRow row5 = new KeyboardRow();
-        KeyboardRow row6 = new KeyboardRow();
-        row1.add(new KeyboardButton("Расписание"));
-        row2.add(new KeyboardButton("Моя группа"));
-        row3.add(new KeyboardButton("Последние сообщения"));
-        row4.add(new KeyboardButton("Помощь"));
+
+        row1.add(new KeyboardButton("Расписание\uD83D\uDC40"));
+        row1.add(new KeyboardButton("Моя группа\uD83D\uDC65" ));
+        row2.add(new KeyboardButton("Последние сообщения\uD83D\uDCEC"));
+        row2.add(new KeyboardButton("Помощь\uD83C\uDD98"));
         keyboard.add(row1);
         keyboard.add(row2);
-        keyboard.add(row3);
-        keyboard.add(row4);
-        if (listOfOdAdmins.contains(chatId)) {
-            row5.add(new KeyboardButton("Отправить сообщение"));
-            keyboard.add(row5);
-            row6.add(new KeyboardButton("Добавить группу/Изменить расписание"));
-            keyboard.add(row6);
+
+        if (user.getRoles().contains(Role.ADMIN)) {
+            row3.add(new KeyboardButton("Отправить сообщение\uD83D\uDCE8"));
+            row3.add(new KeyboardButton("Добавить группу/Изменить расписание\uD83D\uDEE0"));
+            keyboard.add(row3);
+            row4.add(new KeyboardButton("Добавить учителя\uD83D\uDCDA"));
+            keyboard.add(row4);
         }
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;

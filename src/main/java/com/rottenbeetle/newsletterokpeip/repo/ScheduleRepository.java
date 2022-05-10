@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
+    Schedule findByGroupAndWeekDay(String group,String weekday);
     List<Schedule> findAllByGroup(String group);
     @Query(value = "SELECT groupname FROM Schedule", nativeQuery = true)
     Set<String> findAllGroupName();

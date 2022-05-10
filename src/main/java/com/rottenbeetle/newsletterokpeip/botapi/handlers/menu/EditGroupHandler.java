@@ -10,6 +10,7 @@ import com.rottenbeetle.newsletterokpeip.service.MessageService;
 import com.rottenbeetle.newsletterokpeip.service.ReplyMessageService;
 import com.rottenbeetle.newsletterokpeip.service.ScheduleService;
 import com.rottenbeetle.newsletterokpeip.service.UserSubscriptionService;
+import com.rottenbeetle.newsletterokpeip.utils.Emojis;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,31 +23,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/*
+   Выполняет CRUD операции над расписаниями и группами.
+ */
 @Component
 public class EditGroupHandler implements InputMessageHandler {
     private final ReplyMessageService replyMessageService;
     private final UserDataCache userDataCache;
-    private final MessageService messageService;
-    private final UserSubscriptionService userSubscriptionService;
     private final ScheduleService scheduleService;
-    @Value("#{'${telegrambot.botToken}'}")
     private String token;
     private static int countFillLessonsForWeekDay;
     private HashMap<Integer, String> weekdays;
 
-    public EditGroupHandler(ReplyMessageService replyMessageService, UserDataCache userDataCache, MessageService messageService, UserSubscriptionService userSubscriptionService, ScheduleService scheduleService) {
+    public EditGroupHandler(ReplyMessageService replyMessageService, UserDataCache userDataCache, ScheduleService scheduleService) {
         this.replyMessageService = replyMessageService;
         this.userDataCache = userDataCache;
-        this.messageService = messageService;
-        this.userSubscriptionService = userSubscriptionService;
         this.scheduleService = scheduleService;
         this.weekdays = new HashMap<>();
-        weekdays.put(0, "Понедельник");
-        weekdays.put(1, "Вторник");
-        weekdays.put(2, "Среда");
-        weekdays.put(3, "Четверг");
-        weekdays.put(4, "Пятница");
-        weekdays.put(5, "Суббота");
+        weekdays.put(0, "\uD83D\uDE16Понедельник\uD83D\uDE16");
+        weekdays.put(1, "\uD83D\uDE0FВторник\uD83D\uDE0F");
+        weekdays.put(2, "\uD83D\uDE0CСреда\uD83D\uDE0C");
+        weekdays.put(3, "\uD83D\uDE0AЧетверг\uD83D\uDE0A");
+        weekdays.put(4, "\uD83D\uDE1CПятница\uD83D\uDE1C");
+        weekdays.put(5, "\uD83D\uDE1DСуббота\uD83D\uDE1D");
     }
 
     @Override
@@ -111,28 +110,36 @@ public class EditGroupHandler implements InputMessageHandler {
                     break;
             }
         }
-
+        //FIXME При нажатии на ИЗМЕНИТЬ не удалять расписание с БД
         if (botState.equals(BotState.GET_WEEKDAY_AND_ADD_SCHEDULE)) {
-            if (countFillLessonsForWeekDay == 5) {
-                replyToUser = replyMessageService.getSuccessReplyMessage(chatId, "reply.groupWasAdded");
-                userDataCache.setUserCurrentBotState(userId, BotState.SHOW_HELP_MENU);
-                countFillLessonsForWeekDay=0;
-            } else {
+            if (message.equalsIgnoreCase("Отмена")) {
+                userDataCache.setUserCurrentBotState(userId, BotState.SHOW_MAIN_MENU);
+                return replyMessageService.getReplyMessage(chatId, replyMessageService.getEmojiReplyText("reply.mainMenu.welcomeMessage", Emojis.HELP_MENU_WELCOME));
+            }
+
                 String[] lessons = message.split(",");
-                if (lessons.length == 1 || lessons.length == 0) {
+                if (lessons.length == 1 || lessons.length == 0 || lessons.length > 10) {
                     replyToUser = replyMessageService.getWarningReplyMessage(chatId, "reply.lessonsNotCorrect");
                     userDataCache.setUserCurrentBotState(userId, BotState.GET_WEEKDAY_AND_ADD_SCHEDULE);
                 } else {
                     Schedule schedule = new Schedule(profileData.getGroup(), weekdays.get(countFillLessonsForWeekDay), lessons);
-                    scheduleService.saveSchedule(schedule);
-                    countFillLessonsForWeekDay++;
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText("                     -----" + weekdays.get(countFillLessonsForWeekDay) + "-----");
-                    sendMessage.setChatId(String.valueOf(chatId));
-                    replyToUser = sendMessage;
-                    userDataCache.setUserCurrentBotState(userId, BotState.GET_WEEKDAY_AND_ADD_SCHEDULE);
+
+                    if (countFillLessonsForWeekDay == 6) {
+                        replyToUser = replyMessageService.getSuccessReplyMessage(chatId, "reply.groupWasAdded");
+                        userDataCache.setUserCurrentBotState(userId, BotState.SHOW_MAIN_MENU);
+                        countFillLessonsForWeekDay = 0;
+                    }else {
+                        countFillLessonsForWeekDay++;
+                        scheduleService.saveSchedule(schedule);
+                        SendMessage sendMessage = new SendMessage();
+                        sendMessage.setText(weekdays.get(countFillLessonsForWeekDay));
+                        sendMessage.setChatId(String.valueOf(chatId));
+                        replyToUser = sendMessage;
+                        userDataCache.setUserCurrentBotState(userId, BotState.GET_WEEKDAY_AND_ADD_SCHEDULE);
+                    }
+
                 }
-            }
+
         }
 
 
@@ -151,8 +158,8 @@ public class EditGroupHandler implements InputMessageHandler {
                     userDataCache.setUserCurrentBotState(userId, BotState.GET_WEEKDAY_AND_ADD_SCHEDULE);
                     break;
                 case "НАЗАД":
-                    scheduleService.deleteAllByGroup(profileData.getGroup());
-                    replyToUser = replyMessageService.getSuccessReplyMessage(chatId, "reply.mainMenu.welcomeMessage");
+                    //scheduleService.delete(profileData.getGroup());
+                    replyToUser = replyMessageService.getReplyMessage(chatId, replyMessageService.getEmojiReplyText("reply.mainMenu.welcomeMessage", Emojis.HELP_MENU_WELCOME));
                     userDataCache.setUserCurrentBotState(userId, BotState.SHOW_MAIN_MENU);
                     break;
                 default:

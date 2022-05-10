@@ -38,8 +38,22 @@ public class BotStateContext{
         if (isEditingGroup(currentState)){
             return  messageHandlers.get(BotState.GROUP_HANDLER);
         }
+        if (isAddAdmin(currentState)){
+            return  messageHandlers.get(BotState.ADD_ADMIN);
+        }
 
         return messageHandlers.get(currentState);
+    }
+
+
+    private boolean isAddAdmin(BotState currentState) {
+        switch (currentState){
+            case ADD_ADMIN:
+            case SAVE_ADMIN:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private boolean isEditingGroup(BotState currentState) {

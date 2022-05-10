@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message,Long> {
-    @Query(value = "SELECT * FROM messages WHERE group_name=:#{#groupName} OR group_name='ВСЕМ' ORDER BY id DESC LIMIT :#{#count}", nativeQuery = true)
+    @Query(value = "SELECT * FROM messages WHERE group_name=:#{#groupName} " +
+            "OR group_name='ВСЕМ' ORDER BY id DESC LIMIT :#{#count}", nativeQuery = true)
     List<Message> findLastMessages(@Param("count") int count,@Param("groupName") String groupName);
 }
