@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.newsletter'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 
 configurations {
     compileOnly {
@@ -42,11 +42,11 @@ dependencies {
     // https://mvnrepository.com/artifact/com.vdurmont/emoji-java
     implementation group: 'com.vdurmont', name: 'emoji-java', version: '4.0.0'
 
+    // https://mvnrepository.com/artifact/com.heroku.sdk/heroku-deploy
+    implementation group: 'com.heroku.sdk', name: 'heroku-deploy', version: '3.0.4'
 
-
-
-
-
+    // https://mvnrepository.com/artifact/com.heroku.sdk/heroku-jdbc
+    implementation group: 'com.heroku.sdk', name: 'heroku-jdbc', version: '0.1.1'
 
 }
 
